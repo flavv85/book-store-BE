@@ -1,6 +1,6 @@
 package com.flavv85.bookstorebe.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import com.flavv85.bookstorebe.repository.UserRepository;
@@ -12,12 +12,17 @@ import java.util.List;
 @RequestMapping(path = "users")
 public class UserController {
 
-    @Autowired
-    public UserRepository userRepository;
-// list all users method
+    public final UserRepository userRepository;
+
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    // list all users method
     @GetMapping("/get")
     public List<User> getUsers(){
-        return userRepository.findAll();
+        // return sorted list of users by id
+        return userRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 // save method
     @PostMapping("/add")
