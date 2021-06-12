@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.flavv85.bookstorebe.repository.UserRepository;
 import com.flavv85.bookstorebe.model.User;
+
 import java.util.List;
 
 @RestController
@@ -20,20 +21,22 @@ public class UserController {
 
     // list all users method
     @GetMapping("/get")
-    public List<User> getUsers(){
+    public List<User> getUsers() {
         // return sorted list of users by id
         return userRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
-// save method
+
+    // save method
     @PostMapping("/add")
-    public void createUser(@RequestBody User user){
+    public void createUser(@RequestBody User user) {
         userRepository.save(user);
     }
-// delete user
-        @DeleteMapping(path = {"/{id}"})
-    public User deleteUser(@PathVariable("id") long id){
+
+    // delete user
+    @DeleteMapping(path = {"/{id}"})
+    public User deleteUser(@PathVariable("id") long id) {
         User user = userRepository.getById(id);
         userRepository.deleteById(id);
         return user;
-        }
+    }
 }

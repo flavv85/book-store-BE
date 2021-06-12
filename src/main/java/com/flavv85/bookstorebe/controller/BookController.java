@@ -30,6 +30,13 @@ public class BookController {
     public void uploadImage(@RequestParam("imageFile") MultipartFile file) throws IOException {
         this.bytes = file.getBytes();
     }
+    // delete book
+    @DeleteMapping(path = {"/id"})
+    public Book deleteBook(@PathVariable("id") long id){
+        Book book = bookRepository.getById(id);
+        bookRepository.deleteById(id);
+        return book;
+    }
 
     // save book details
     @PostMapping("/add")
@@ -38,4 +45,6 @@ public class BookController {
         bookRepository.save(book);
         this.bytes = null;
     }
+
+
 }
