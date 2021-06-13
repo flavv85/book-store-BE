@@ -2,7 +2,6 @@ package com.flavv85.bookstorebe.controller;
 
 import com.flavv85.bookstorebe.model.Book;
 import com.flavv85.bookstorebe.repository.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,9 +16,12 @@ public class BookController {
 
     private byte[] bytes;
 
-    @Autowired
-    private BookRepository bookRepository;
+    public final BookRepository bookRepository;
+    public BookController(BookRepository bookRepository){
+        this.bookRepository = bookRepository;
+    }
 
+    // get all books
     @GetMapping("/get")
     public List<Book> getBooks() {
         return bookRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION, "name"));
@@ -31,7 +33,7 @@ public class BookController {
         this.bytes = file.getBytes();
     }
     // delete book
-    @DeleteMapping(path = {"/id"})
+    @DeleteMapping(path = {"/{id}"})
     public Book deleteBook(@PathVariable("id") long id){
         Book book = bookRepository.getById(id);
         bookRepository.deleteById(id);
@@ -44,6 +46,12 @@ public class BookController {
         book.setPicByte(this.bytes);
         bookRepository.save(book);
         this.bytes = null;
+    }
+
+    // update book
+    @PutMapping("/update")
+    public void updateBook(@RequestBody Book book) {
+        bookRepository.save(book);
     }
 
 
